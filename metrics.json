@@ -1,0 +1,29 @@
+{
+  "efficientnet": {
+    "name": "EfficientNetB0 (Spatial Baseline)",
+    "accuracy": 87.4,
+    "parameters_m": 5.3,
+    "latency_ms": 28,
+    "loss": 0.3120,
+    "auc": 0.915,
+    "description": "Baseline spatial model using depthwise separable convolutions to extract frame-level features with a highly efficient parameter footprint."
+  },
+  "xception": {
+    "name": "Xception (Spatial Optimized)",
+    "accuracy": 90.2,
+    "parameters_m": 22.9,
+    "latency_ms": 45,
+    "loss": 0.2450,
+    "auc": 0.941,
+    "description": "Optimized spatial network incorporating depthwise separable convolutions and residual connections, capturing micro-texture facial anomalies."
+  },
+  "hybrid": {
+    "name": "Hybrid ResNet50 + Bi-LSTM (Spatio-Temporal Flagship)",
+    "accuracy": 93.8,
+    "parameters_m": 24.6,
+    "latency_ms": 153,
+    "loss": 0.1580,
+    "auc": 0.972,
+    "description": "Flagship model combining a deep ResNet50 feature extractor with a Bidirectional LSTM temporal network to track inter-frame jitter, blending anomalies, and consistency over time."
+  }
+}

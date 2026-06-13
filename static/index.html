@@ -1,0 +1,397 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DeepGuard AI - Comparative Deepfake Detection Suite</title>
+    <meta name="description" content="An academic comparative analysis of three state-of-the-art deep learning architectures for deepfake video detection: Xception, EfficientNetB0, and Hybrid ResNet50 + Bi-LSTM.">
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <!-- FontAwesome for icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="style.css">
+    <!-- Chart.js CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+    <!-- Background glow elements -->
+    <div class="glow-orb orb-1"></div>
+    <div class="glow-orb orb-2"></div>
+    <div class="glow-orb orb-3"></div>
+
+    <!-- Navigation Header -->
+    <header class="glass-header">
+        <div class="container nav-container">
+            <a href="#" class="logo">
+                <i class="fa-solid fa-shield-halved logo-icon"></i>
+                <span>DEEPGUARD<span class="highlight">AI</span></span>
+            </a>
+            <nav class="nav-links">
+                <a href="#hero" class="active"><i class="fa-solid fa-house"></i> Home</a>
+                <a href="#playground"><i class="fa-solid fa-flask"></i> Live Playground</a>
+                <a href="#analytics"><i class="fa-solid fa-chart-simple"></i> Thesis Analytics</a>
+                <a href="#extension-info"><i class="fa-solid fa-puzzle-piece"></i> Chrome Extension</a>
+            </nav>
+            <div class="nav-actions">
+                <a href="#playground" class="btn btn-primary btn-sm">Scan Now</a>
+            </div>
+        </div>
+    </header>
+
+    <main class="container">
+        <!-- Hero Section -->
+        <section id="hero" class="hero-section">
+            <div class="hero-content">
+                <div class="badge-container">
+                    <span class="badge"><i class="fa-solid fa-graduation-cap"></i> Undergraduate Final Year Project</span>
+                </div>
+                <h1 id="hero-title">Comparative Analysis of <span class="gradient-text">Deepfake Video</span> Detection Architectures</h1>
+                <p class="hero-subtitle">
+                    Evaluating spatial texture anomalies against spatio-temporal dynamics using 
+                    <strong>EfficientNetB0</strong>, <strong>Xception</strong>, and our flagship <strong>Hybrid ResNet50 + Bi-LSTM</strong> network.
+                </p>
+                <div class="hero-buttons">
+                    <a href="#playground" class="btn btn-gradient btn-lg"><i class="fa-solid fa-circle-play"></i> Try Live Playground</a>
+                    <a href="#analytics" class="btn btn-outline btn-lg"><i class="fa-solid fa-chart-pie"></i> View Training Metrics</a>
+                </div>
+            </div>
+            <div class="hero-visual">
+                <div class="shield-container">
+                    <div class="shield-core">
+                        <i class="fa-solid fa-shield-virus"></i>
+                    </div>
+                    <div class="shield-ring ring-1"></div>
+                    <div class="shield-ring ring-2"></div>
+                    <div class="shield-ring ring-3"></div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Live Playground Section -->
+        <section id="playground" class="section-card">
+            <div class="section-header">
+                <h2><i class="fa-solid fa-flask-vial icon-accent"></i> Live Inference Playground</h2>
+                <p>Upload a video or image file. The system will detect, crop faces, and run all 3 models in parallel for a comparative real-time verdict.</p>
+            </div>
+
+            <div class="playground-grid">
+                <!-- Dropzone Area -->
+                <div class="dropzone-card">
+                    <!-- Tab Controls -->
+                    <div class="playground-tabs">
+                        <button type="button" class="tab-btn active" id="tab-upload">
+                            <i class="fa-solid fa-file-arrow-up"></i> Upload File
+                        </button>
+                        <button type="button" class="tab-btn" id="tab-url">
+                            <i class="fa-solid fa-link"></i> Scan Video URL
+                        </button>
+                    </div>
+
+                    <!-- Upload File Tab Content -->
+                    <div id="upload-container">
+                        <div class="file-dropzone" id="file-dropzone">
+                            <input type="file" id="file-input" accept="image/*,video/*" style="display: none;">
+                            <div class="dropzone-content" id="dropzone-default">
+                                <div class="upload-icon-container">
+                                    <i class="fa-solid fa-cloud-arrow-up animated-bounce"></i>
+                                </div>
+                                <h3>Drag & Drop Video or Image</h3>
+                                <p>Supports MP4, AVI, MOV, JPG, JPEG, PNG</p>
+                                <button type="button" class="btn btn-secondary" onclick="document.getElementById('file-input').click()">Browse Files</button>
+                            </div>
+                            <div class="dropzone-content" id="dropzone-active" style="display: none;">
+                                <i class="fa-regular fa-file-video file-type-icon" id="file-preview-icon"></i>
+                                <h3 id="selected-file-name">filename.mp4</h3>
+                                <p id="selected-file-size">14.2 MB</p>
+                                <div class="btn-group">
+                                    <button type="button" class="btn btn-gradient" id="btn-analyze"><i class="fa-solid fa-microscope"></i> Start Detection</button>
+                                    <button type="button" class="btn btn-outline-danger" id="btn-reset">Reset</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Scan Video URL Tab Content -->
+                    <div id="url-container" style="display: none;">
+                        <div class="url-input-card">
+                            <div class="url-icon-container">
+                                <i class="fa-solid fa-cloud-arrow-down"></i>
+                            </div>
+                            <h3>Scan Video URL</h3>
+                            <p>Analyze deepfakes directly from any remote video stream</p>
+                            
+                            <div class="url-input-group">
+                                <input type="url" id="video-url-input" placeholder="Paste direct video URL (e.g. https://example.com/video.mp4)" class="url-input">
+                                <button type="button" class="btn btn-gradient" id="btn-scan-url">Scan URL</button>
+                            </div>
+                            <p class="url-support-text"><i class="fa-solid fa-info-circle"></i> Supports direct links ending in .mp4, .avi, .mov, .mkv, .webm</p>
+                        </div>
+                    </div>
+
+
+                    <!-- Processing Stages Indicator -->
+                    <div class="analysis-status-card" id="analysis-status" style="display: none;">
+                        <h3><i class="fa-solid fa-gear fa-spin"></i> Processing Pipeline</h3>
+                        <ul class="status-steps">
+                            <li id="step-upload" class="step-active"><i class="fa-solid fa-circle-check"></i> Read Upload Data</li>
+                            <li id="step-face" class="step-pending"><i class="fa-solid fa-circle-notch"></i> OpenCV Cascade Face Detection</li>
+                            <li id="step-spatial" class="step-pending"><i class="fa-solid fa-circle-notch"></i> Running Spatial Extractors (Xception/EfficientNet)</li>
+                            <li id="step-temporal" class="step-pending"><i class="fa-solid fa-circle-notch"></i> Evaluating Spatio-Temporal Sequence (Bi-LSTM)</li>
+                        </ul>
+                        <div class="progress-bar-container">
+                            <div class="progress-bar-fill" id="progress-bar-fill"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Live Results Area -->
+                <div class="results-card" id="results-area">
+                    <div class="empty-state" id="empty-state-results">
+                        <i class="fa-solid fa-magnifying-glass-chart"></i>
+                        <h3>Awaiting Inference</h3>
+                        <p>Upload a file and trigger the analysis to see the models' predictions, latencies, and spatial attention heatmaps side-by-side.</p>
+                    </div>
+
+                    <div class="results-content" id="results-content" style="display: none;">
+                        <div class="results-header-summary">
+                            <div class="face-preview-container">
+                                <h4>Face Tracked</h4>
+                                <img id="cropped-face-img" src="" alt="Cropped Face Anchor">
+                            </div>
+                            <div class="overall-verdict-box" id="overall-verdict-box">
+                                <h4>Consensus Verdict</h4>
+                                <div class="verdict-badge" id="consensus-badge">FAKE</div>
+                                <p id="consensus-details">Average confidence: 98.4%</p>
+                            </div>
+                        </div>
+
+                        <!-- 3 Model Comparative Cards -->
+                        <div class="model-cards-grid">
+                            <!-- EfficientNet Card -->
+                            <div class="model-result-card" id="card-efficientnet">
+                                <div class="card-header-model">
+                                    <h4>EfficientNetB0</h4>
+                                    <span class="card-tag">Spatial Baseline</span>
+                                </div>
+                                <div class="score-display">
+                                    <div class="score-circle">
+                                        <svg>
+                                            <circle cx="45" cy="45" r="40"></circle>
+                                            <circle cx="45" cy="45" r="40" id="circle-eff"></circle>
+                                        </svg>
+                                        <div class="score-number" id="score-eff">0%</div>
+                                    </div>
+                                    <div class="verdict-label" id="label-eff">REAL</div>
+                                </div>
+                                <div class="gradcam-container">
+                                    <h5>Grad-CAM Attention</h5>
+                                    <div class="heatmap-wrapper">
+                                        <img id="heatmap-eff" src="" alt="EfficientNet Heatmap">
+                                        <div class="heatmap-overlay-info">Hover to zoom</div>
+                                    </div>
+                                </div>
+                                <div class="latency-pill"><i class="fa-regular fa-clock"></i> Latency: <span id="latency-eff">0</span>ms</div>
+                            </div>
+
+                            <!-- Xception Card -->
+                            <div class="model-result-card" id="card-xception">
+                                <div class="card-header-model">
+                                    <h4>Xception</h4>
+                                    <span class="card-tag">Spatial Optimized</span>
+                                </div>
+                                <div class="score-display">
+                                    <div class="score-circle">
+                                        <svg>
+                                            <circle cx="45" cy="45" r="40"></circle>
+                                            <circle cx="45" cy="45" r="40" id="circle-xcp"></circle>
+                                        </svg>
+                                        <div class="score-number" id="score-xcp">0%</div>
+                                    </div>
+                                    <div class="verdict-label" id="label-xcp">REAL</div>
+                                </div>
+                                <div class="gradcam-container">
+                                    <h5>Grad-CAM Attention</h5>
+                                    <div class="heatmap-wrapper">
+                                        <img id="heatmap-xcp" src="" alt="Xception Heatmap">
+                                        <div class="heatmap-overlay-info">Hover to zoom</div>
+                                    </div>
+                                </div>
+                                <div class="latency-pill"><i class="fa-regular fa-clock"></i> Latency: <span id="latency-xcp">0</span>ms</div>
+                            </div>
+
+                            <!-- Hybrid Card -->
+                            <div class="model-result-card" id="card-hybrid">
+                                <div class="card-header-model">
+                                    <h4>ResNet50 + Bi-LSTM</h4>
+                                    <span class="card-tag flagship-tag">Spatio-Temporal</span>
+                                </div>
+                                <div class="score-display" id="hybrid-active-display">
+                                    <div class="score-circle">
+                                        <svg>
+                                            <circle cx="45" cy="45" r="40"></circle>
+                                            <circle cx="45" cy="45" r="40" id="circle-hyb"></circle>
+                                        </svg>
+                                        <div class="score-number" id="score-hyb">0%</div>
+                                    </div>
+                                    <div class="verdict-label" id="label-hyb">REAL</div>
+                                </div>
+                                <div class="hybrid-error-box" id="hybrid-inactive-display" style="display: none;">
+                                    <i class="fa-solid fa-triangle-exclamation"></i>
+                                    <p>Hybrid Model Requires Video Input</p>
+                                    <span>Upload an MP4/AVI file to track temporal movement and blending anomalies across frame sequences.</span>
+                                </div>
+                                <div class="gradcam-container" id="hybrid-desc-box">
+                                    <h5>Sequence Dynamics</h5>
+                                    <div class="hybrid-info-p">
+                                        <i class="fa-solid fa-chart-line"></i>
+                                        <p>Analyzes 5 sequential face extracts for temporal jitters, warping artifacts, and biological flow inconsistencies.</p>
+                                    </div>
+                                </div>
+                                <div class="latency-pill" id="hybrid-latency-pill"><i class="fa-regular fa-clock"></i> Latency: <span id="latency-hyb">0</span>ms</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Comparative Thesis Analytics Section -->
+        <section id="analytics" class="section-card">
+            <div class="section-header">
+                <h2><i class="fa-solid fa-chart-pie icon-accent"></i> Academic Comparative Analytics</h2>
+                <p>These values represent actual experimental metrics extracted from model training and validation phases.</p>
+            </div>
+
+            <div class="analytics-grid">
+                <!-- Charts -->
+                <div class="chart-container-wrapper">
+                    <h3>Classification Accuracy Comparison (%)</h3>
+                    <div class="chart-box">
+                        <canvas id="accuracyChart"></canvas>
+                    </div>
+                </div>
+
+                <div class="chart-container-wrapper">
+                    <h3>Model Sizing (Total Parameters)</h3>
+                    <div class="chart-box">
+                        <canvas id="parametersChart"></canvas>
+                    </div>
+                </div>
+
+                <div class="chart-container-wrapper">
+                    <h3>Average Inference Speed (Latency)</h3>
+                    <div class="chart-box">
+                        <canvas id="latencyChart"></canvas>
+                    </div>
+                </div>
+
+                <!-- Parameters Table & Model Cards -->
+                <div class="table-container-wrapper">
+                    <h3>Thesis Experimental Summary</h3>
+                    <div class="table-responsive">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Architecture</th>
+                                    <th>Classification Accuracy</th>
+                                    <th>Validation Loss</th>
+                                    <th>Area Under Curve (AUC)</th>
+                                    <th>Model Parameter Count</th>
+                                    <th>Avg Latency (ms)</th>
+                                </tr>
+                            </thead>
+                            <tbody id="metrics-table-body">
+                                <tr>
+                                    <td colspan="6" class="text-center"><i class="fa-solid fa-spinner fa-spin"></i> Loading metadata...</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Chrome Extension Showcase -->
+        <section id="extension-info" class="section-card extension-showcase">
+            <div class="extension-content-wrapper">
+                <div class="extension-text">
+                    <div class="badge-container">
+                        <span class="badge badge-purple"><i class="fa-solid fa-cube"></i> Browser Integration</span>
+                    </div>
+                    <h2>Web Extension Integration</h2>
+                    <p>
+                        Deploy the flagship <strong>ResNet50 + Bi-LSTM</strong> model directly in your browser. 
+                        Scan video content in real-time on social media platforms or streaming sites.
+                    </p>
+                    <div class="extension-features">
+                        <div class="feature-item">
+                            <i class="fa-solid fa-circle-check"></i>
+                            <div>
+                                <strong>Manifest V3 Standard:</strong> Built with the latest Chrome standards for efficiency and security.
+                            </div>
+                        </div>
+                        <div class="feature-item">
+                            <i class="fa-solid fa-circle-check"></i>
+                            <div>
+                                <strong>On-the-fly Scan Overlay:</strong> Injects a subtle overlay button on HTML5 video players.
+                            </div>
+                        </div>
+                        <div class="feature-item">
+                            <i class="fa-solid fa-circle-check"></i>
+                            <div>
+                                <strong>Dynamic Frame Capture:</strong> Captures 5 temporal frames locally and scans them in milliseconds.
+                            </div>
+                        </div>
+                    </div>
+                    <div class="installation-steps">
+                        <h3>Sideload Instructions:</h3>
+                        <ol>
+                            <li>Open Chrome and navigate to <code class="code-link">chrome://extensions/</code></li>
+                            <li>Toggle the <strong>Developer mode</strong> switch in the top right corner.</li>
+                            <li>Click the <strong>Load unpacked</strong> button in the top left.</li>
+                            <li>Select the project's <code class="code-file">extension/</code> directory from the workspace.</li>
+                        </ol>
+                    </div>
+                </div>
+                <div class="extension-mockup">
+                    <div class="mockup-frame">
+                        <div class="browser-bar">
+                            <div class="dots"><span class="dot"></span><span class="dot"></span><span class="dot"></span></div>
+                            <div class="address-bar">youtube.com/watch?v=deepfake</div>
+                        </div>
+                        <div class="mockup-screen">
+                            <div class="mockup-video">
+                                <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&q=80&w=400" alt="Sample Video Frame">
+                                <div class="mockup-overlay-btn">
+                                    <i class="fa-solid fa-shield-halved"></i> Scan Video
+                                </div>
+                                <div class="mockup-verdict-alert">
+                                    <span class="verdict-indicator fake"></span>
+                                    <div class="verdict-alert-text">
+                                        <strong>Deepfake Detected!</strong>
+                                        <span>ResNet+LSTM: 93.8% Confidence</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container footer-content">
+            <p>&copy; 2026 Covenant University. B.Sc. Computer Science Thesis Project.</p>
+            <p>Designed with premium aesthetics. Dynamic backend serving enabled.</p>
+        </div>
+    </footer>
+
+    <!-- Custom Script -->
+    <script src="app.js"></script>
+</body>
+</html>

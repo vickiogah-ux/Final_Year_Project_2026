@@ -1,0 +1,24 @@
+# Python environment & virtualenv
+python_embed/
+venv/
+.venv/
+env/
+__pycache__/
+*.pyc
+
+# Deep learning models (too large for standard git push)
+*.h5
+*.keras
+
+# Local logs and temporary scan videos
+*.log
+*.mp4
+*.avi
+*.mov
+*.mkv
+*.webm
+temp_*.mp4
+
+# OS generated files
+.DS_Store
+Thumbs.db

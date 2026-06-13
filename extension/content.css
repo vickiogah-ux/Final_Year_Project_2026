@@ -1,0 +1,178 @@
+/* ==========================================
+   INJECTED PAGE LAYOUT FOR DEEPGUARD SCANNER
+   ========================================== */
+
+/* Wrapper for video parent context */
+.dg-ext-wrapper {
+    position: relative !important;
+}
+
+/* Floating overlay button injected on top of web video players */
+.dg-ext-scan-btn {
+    position: absolute !important;
+    top: 15px !important;
+    right: 15px !important;
+    z-index: 999999 !important;
+    background: linear-gradient(135deg, #a855f7, #06b6d4) !important;
+    color: #ffffff !important;
+    border: none !important;
+    border-radius: 8px !important;
+    padding: 8px 14px !important;
+    font-family: 'Outfit', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif !important;
+    font-size: 11px !important;
+    font-weight: 700 !important;
+    text-transform: uppercase !important;
+    letter-spacing: 0.5px !important;
+    cursor: pointer !important;
+    display: flex !important;
+    align-items: center !important;
+    gap: 6px !important;
+    box-shadow: 0 4px 12px rgba(168, 85, 247, 0.4) !important;
+    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1) !important;
+    opacity: 0.4 !important;
+}
+
+/* Make button visible on video hover */
+.dg-ext-wrapper:hover .dg-ext-scan-btn,
+.dg-ext-scan-btn:hover {
+    opacity: 1 !important;
+    transform: scale(1.03) !important;
+}
+
+/* Processing Overlay */
+.dg-ext-overlay {
+    position: absolute !important;
+    top: 0 !important;
+    left: 0 !important;
+    width: 100% !important;
+    height: 100% !important;
+    background: rgba(10, 11, 16, 0.85) !important;
+    backdrop-filter: blur(12px) !important;
+    -webkit-backdrop-filter: blur(12px) !important;
+    z-index: 9999999 !important;
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: center !important;
+    justify-content: center !important;
+    gap: 16px !important;
+    color: #ffffff !important;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif !important;
+    animation: dg-fade-in 0.25s ease-out !important;
+}
+
+/* Spinner */
+.dg-ext-spinner {
+    width: 40px !important;
+    height: 40px !important;
+    border: 4px solid rgba(255, 255, 255, 0.1) !important;
+    border-top: 4px solid #a855f7 !important;
+    border-radius: 50% !important;
+    animation: dg-spin 1s linear infinite !important;
+}
+
+.dg-ext-text {
+    font-size: 15px !important;
+    font-weight: 600 !important;
+    letter-spacing: 0.5px !important;
+}
+.dg-ext-subtext {
+    font-size: 11px !important;
+    color: #94a3b8 !important;
+    margin-top: -8px !important;
+}
+
+/* Patient Message centered styled */
+.dg-ext-patient-msg {
+    font-size: 13px !important;
+    font-weight: 700 !important;
+    color: #06b6d4 !important;
+    margin: 4px 0 !important;
+    text-align: center !important;
+    animation: dg-pulse 1.5s infinite alternate !important;
+}
+
+@keyframes dg-pulse {
+    from { opacity: 0.6; }
+    to { opacity: 1; }
+}
+
+/* Verdict Overlay UI Alert - Floating fixed toast at viewport bottom-right */
+.dg-ext-alert {
+    position: fixed !important;
+    bottom: 30px !important;
+    right: 30px !important;
+    left: auto !important;
+    transform: none !important;
+    z-index: 2147483647 !important;
+    background: rgba(10, 11, 16, 0.95) !important;
+    backdrop-filter: blur(16px) !important;
+    border-radius: 12px !important;
+    padding: 14px 22px !important;
+    display: flex !important;
+    align-items: center !important;
+    gap: 16px !important;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.5), 0 0 20px rgba(168, 85, 247, 0.2) !important;
+    animation: dg-slide-in 0.4s cubic-bezier(0.25, 0.8, 0.25, 1) !important;
+    min-width: 300px !important;
+    max-width: 420px !important;
+    border: 1px solid transparent !important;
+}
+
+.dg-ext-alert.fake {
+    border-color: #f43f5e !important;
+    box-shadow: 0 10px 30px rgba(244, 63, 94, 0.2), 0 0 20px rgba(244, 63, 94, 0.15) !important;
+}
+.dg-ext-alert.real {
+    border-color: #06b6d4 !important;
+    box-shadow: 0 10px 30px rgba(6, 182, 212, 0.2), 0 0 20px rgba(6, 182, 212, 0.15) !important;
+}
+
+.dg-ext-alert-icon {
+    font-size: 20px !important;
+}
+.dg-ext-alert.fake .dg-ext-alert-icon { color: #f43f5e !important; }
+.dg-ext-alert.real .dg-ext-alert-icon { color: #06b6d4 !important; }
+
+.dg-ext-alert-body {
+    display: flex !important;
+    flex-direction: column !important;
+    flex-grow: 1 !important;
+}
+.dg-ext-alert-title {
+    font-size: 13px !important;
+    font-weight: 700 !important;
+}
+.dg-ext-alert.fake .dg-ext-alert-title { color: #f43f5e !important; }
+.dg-ext-alert.real .dg-ext-alert-title { color: #06b6d4 !important; }
+
+.dg-ext-alert-desc {
+    font-size: 11px !important;
+    color: #94a3b8 !important;
+    margin-top: 2px !important;
+}
+
+.dg-ext-close {
+    background: transparent !important;
+    border: none !important;
+    color: #64748b !important;
+    cursor: pointer !important;
+    font-size: 16px !important;
+    padding: 4px !important;
+}
+.dg-ext-close:hover {
+    color: #cbd5e1 !important;
+}
+
+/* Animations */
+@keyframes dg-spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+@keyframes dg-fade-in {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+@keyframes dg-slide-in {
+    from { opacity: 0; transform: translateY(40px); }
+    to { opacity: 1; transform: translateY(0); }
+}

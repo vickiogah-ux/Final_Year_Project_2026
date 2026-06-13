@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DeepGuard AI Extension</title>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;800&family=Plus+Jakarta+Sans:wght@400;500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="popup.css">
+</head>
+<body>
+    <div class="extension-container">
+        <!-- Header -->
+        <header>
+            <div class="brand">
+                <i class="fa-solid fa-shield-halved logo-icon"></i>
+                <span class="brand-name">DEEPGUARD <span class="highlight">AI</span></span>
+            </div>
+            <div class="status-indicator">
+                <span class="status-dot disconnected" id="connection-dot"></span>
+                <span class="status-text" id="connection-text">Server: Checking...</span>
+            </div>
+        </header>
+
+        <!-- Main Dashboard -->
+        <main>
+            <div class="server-error-banner" id="server-error" style="display: none;">
+                <i class="fa-solid fa-triangle-exclamation"></i>
+                <p>FastAPI Server offline. Run <code class="cmd-run">python server.py</code> to connect.</p>
+            </div>
+
+            <!-- Model Info -->
+            <div class="model-badge">
+                <span class="flagship-title"><i class="fa-solid fa-cube"></i> Active Model</span>
+                <h4>Hybrid ResNet50 + Bi-LSTM</h4>
+                <p>Spatio-Temporal Detection Flagship (99.9% Accuracy)</p>
+            </div>
+
+            <!-- Controller -->
+            <div class="control-box">
+                <button type="button" class="btn-scan" id="btn-scan-page" disabled>
+                    <i class="fa-solid fa-expand"></i> Scan Active Video
+                </button>
+                <p class="helper-text">Extension automatically injects a "Scan Video" overlay on web players.</p>
+            </div>
+
+            <!-- OR Divider -->
+            <div class="divider-text">
+                <span>OR</span>
+            </div>
+
+            <!-- URL Input Scanner -->
+            <div class="url-scan-box">
+                <div class="extension-url-input-group">
+                    <input type="url" id="extension-url-input" placeholder="Paste direct video URL..." disabled>
+                    <button type="button" id="btn-scan-url-ext" class="btn-scan-ext" disabled>
+                        <i class="fa-solid fa-arrow-right"></i>
+                    </button>
+                </div>
+                <p class="helper-text">Verify deepfakes by scanning direct video streams.</p>
+            </div>
+
+            <!-- Result Pane -->
+            <div class="result-pane" id="result-pane" style="display: none;">
+                <h4 class="pane-title">Last Scan Verdict</h4>
+                <div class="verdict-card" id="verdict-card">
+                    <div class="verdict-header">
+                        <span class="verdict-tag" id="verdict-tag">FAKE</span>
+                        <span class="verdict-score" id="verdict-score">99.9% Confidence</span>
+                    </div>
+                    <div class="verdict-details">
+                        <i class="fa-solid fa-circle-exclamation info-icon"></i>
+                        <span id="verdict-desc">Temporal movement irregularities detected.</span>
+                    </div>
+                </div>
+            </div>
+        </main>
+
+        <!-- Footer -->
+        <footer>
+            <p>B.Sc. Computer Science Thesis Integration</p>
+        </footer>
+    </div>
+    <script src="popup.js"></script>
+</body>
+</html>
