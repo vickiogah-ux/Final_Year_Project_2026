@@ -249,24 +249,34 @@ def crop_face(img_array):
     cropped_face = img_array[start_y:end_y, start_x:end_x]
     return cropped_face, (start_y, end_y, start_x, end_x)
 
-def get_mock_analysis(file_bytes, filename, is_video, override_fake=False):
+def get_mock_analysis(file_bytes, filename, is_video, override_fake=False, seed_string=None):
     import io
     import tempfile
     import random
+    import hashlib
     
+    # Deterministically seed the random generator based on the URL or file name/bytes
+    # to yield unique but reproducible confidence values for different videos.
+    if seed_string:
+        h = int(hashlib.md5(seed_string.encode('utf-8', errors='ignore')).hexdigest(), 16)
+        random.seed(h)
+    elif file_bytes:
+        h = int(hashlib.md5(file_bytes[:10000]).hexdigest(), 16)
+        random.seed(h)
+        
     is_fake = override_fake or check_metadata_heuristics([filename])
     
     # Generate realistic variations around target training benchmarks
     if is_fake:
         # FAKE target predictions (confidence = 1 - pred)
-        eff_pred = max(0.01, min(0.09, 0.042 + random.uniform(-0.02, 0.02)))
-        xcp_pred = max(0.01, min(0.07, 0.026 + random.uniform(-0.015, 0.015)))
-        hybrid_pred = max(0.0001, min(0.005, 0.001 + random.uniform(-0.0008, 0.0008)))
+        eff_pred = 0.05 + random.uniform(-0.03, 0.04)
+        xcp_pred = 0.04 + random.uniform(-0.03, 0.04)
+        hybrid_pred = 0.002 + random.uniform(-0.0019, 0.006)
     else:
         # REAL target predictions (confidence = pred)
-        eff_pred = max(0.91, min(0.99, 0.958 + random.uniform(-0.02, 0.02)))
-        xcp_pred = max(0.93, min(0.995, 0.974 + random.uniform(-0.015, 0.015)))
-        hybrid_pred = max(0.995, min(0.9999, 0.999 + random.uniform(-0.0008, 0.0008)))
+        eff_pred = 0.945 + random.uniform(-0.03, 0.03)
+        xcp_pred = 0.957 + random.uniform(-0.027, 0.028)
+        hybrid_pred = 0.995 + random.uniform(-0.005, 0.0049)
 
     img_rgb = None
     video_frames = []
@@ -448,7 +458,7 @@ async def analyze_file(file: UploadFile = File(...)):
     override_fake = check_metadata_heuristics([file.filename])
     
     if mock_mode:
-        return get_mock_analysis(file_bytes, file.filename, is_video, override_fake=override_fake)
+        return get_mock_analysis(file_bytes, file.filename, is_video, override_fake=override_fake, seed_string=file.filename)
         
     img_array = None
     video_frames = []
@@ -592,9 +602,21 @@ async def detect_stream(payload: FrameSequencePayload):
     override_fake = check_metadata_heuristics([payload.title, payload.description, payload.url])
     
     if mock_mode:
+        import hashlib
+        import random
         # Determine verdict deterministically from base64 content length or override
         is_fake = override_fake or (len(payload.frames[0].replace('=', '')) % 2 == 0)
-        hybrid_pred = 0.0119 if is_fake else 0.9991 # Matches training loss/confidence
+        
+        # Seed generator based on payload metadata to yield unique scores
+        seed_str = payload.url or payload.title or payload.frames[0][:100]
+        h = int(hashlib.md5(seed_str.encode('utf-8', errors='ignore')).hexdigest(), 16)
+        random.seed(h)
+        
+        if is_fake:
+            hybrid_pred = 0.005 + random.uniform(-0.0049, 0.015)
+        else:
+            hybrid_pred = 0.995 + random.uniform(-0.012, 0.0049)
+            
         hybrid_class = "REAL" if hybrid_pred >= 0.5 else "FAKE"
         hybrid_confidence = hybrid_pred * 100 if hybrid_pred >= 0.5 else (1 - hybrid_pred) * 100
         return {
@@ -810,7 +832,7 @@ async def analyze_url(payload: UrlPayload):
             # Simulated verdict based on override_fake
             is_fake = override_fake
             mock_filename = "fake_video.mp4" if is_fake else "real_video.mp4"
-            return get_mock_analysis(file_bytes, mock_filename, is_video=True, override_fake=is_fake)
+            return get_mock_analysis(file_bytes, mock_filename, is_video=True, override_fake=is_fake, seed_string=url)
         else:
             raise HTTPException(status_code=400, detail="Could not resolve or download the video for simulation.")
 
